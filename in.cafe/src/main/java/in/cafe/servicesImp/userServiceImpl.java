@@ -1,5 +1,6 @@
 package in.cafe.servicesImp;
 
+import com.google.common.base.Strings;
 import in.cafe.JWT.CustomerUsersDetailsService;
 import in.cafe.JWT.JwtFilter;
 import in.cafe.JWT.JwtUtil;
@@ -170,13 +171,54 @@ public class userServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public ResponseEntity<String> checkToken() {
+    return CafeUtils.getResponseEntity("true",HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+        try{
+            User userObj = repo.findByEmail(jwtFilter.getCurrentUser());
+            if(!userObj.equals(null)){
+                  if(userObj.getPassword().equals(requestMap.get("oldPassword"))){
+                     userObj.setPassword(requestMap.get("newPassword"));
+                     repo.save(userObj);
+                     return CafeUtils.getResponseEntity("Password Updated Successfully",HttpStatus.OK);
+                  }
+                  return CafeUtils.getResponseEntity("Incorrect Old Password",HttpStatus.OK);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+        try{
+            User user = repo.findByEmail(requestMap.get("email"));
+            if(!Objects.isNull(user) && !Strings.isNullOrEmpty(user.getEmail())){
+
+                emailUtils.forgotMail(user.getEmail(),"Credentials by Cafe Management System",user.getPassword());
+
+               return CafeUtils.getResponseEntity("Check your mail for Credentials",HttpStatus.OK);
+            }
+            return CafeUtils.getResponseEntity("Password Updated Successfully",HttpStatus.OK);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     private void sendMailToAllAdmin(String status, String user, List<String> allAdmin) {
            allAdmin.remove(jwtFilter.getCurrentUser());
            if(status != null && status.equalsIgnoreCase("true")){
                  emailUtils.sendEmail(jwtFilter.getCurrentUser(),"Account Approved","USER:- "+user+" \n is approved by \nADMIN:-" + jwtFilter.getCurrentUser(),allAdmin);
            }else{
                emailUtils.sendEmail(jwtFilter.getCurrentUser(),"Account Approved","USER:- "+user+" \n is disabled by \nADMIN:-" + jwtFilter.getCurrentUser(),allAdmin);
-
            }
     }
 

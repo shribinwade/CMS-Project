@@ -28,4 +28,7 @@ public interface repository extends JpaRepository<User,Integer> {
     @Query("select u.email from User u where u.role = 'admin'")
     List<String> getAllAdmin();
 
+
+    User findByEmail(String email);
+
 }

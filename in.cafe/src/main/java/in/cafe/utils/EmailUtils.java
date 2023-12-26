@@ -5,6 +5,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessageRemovedException;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 
@@ -43,5 +45,20 @@ public class EmailUtils {
             cc[i] = ccList.get(i);
         }
         return cc;
+    }
+
+    public void forgotMail(String to,String subject,String password) throws MessagingException{
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("shribinwade.100@gmail.com");
+        helper.setTo(to);
+        helper.setSubject(subject);
+
+        String htmlMsg =  "<p><b>Your Login details for Cafe Management System</b><br><b>Email: </b> " + to + " <br><b>Password: </b> " + password + "<br><a href=\"http://localhost:4200/\">Click here to login</a></p>";
+
+       message.setContent(htmlMsg,"text/html");
+       mailSender.send(message);
+
     }
 }
