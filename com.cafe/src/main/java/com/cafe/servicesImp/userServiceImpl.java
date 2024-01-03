@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -38,13 +39,15 @@ public class userServiceImpl implements UserService {
   @Autowired
   private UserService userService;
   @Autowired
-  JwtUtil jwtUtil;
+  private JwtUtil jwtUtil;
 
   @Autowired
-  JwtFilter jwtFilter;
+  private JwtFilter jwtFilter;
 
   @Autowired
-  EmailUtils emailUtils;
+  private EmailUtils emailUtils;
+  
+  
 
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
