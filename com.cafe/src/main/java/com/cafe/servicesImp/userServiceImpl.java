@@ -206,7 +206,7 @@ public class userServiceImpl implements UserService {
 
                return CafeUtils.getResponseEntity("Check your mail for Credentials",HttpStatus.OK);
             }
-            return CafeUtils.getResponseEntity("Password Updated Successfully",HttpStatus.OK);
+            return CafeUtils.getResponseEntity("Email Not Found, Try again",HttpStatus.OK);
 
         }catch(Exception ex){
             ex.printStackTrace();

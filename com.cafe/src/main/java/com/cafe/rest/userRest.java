@@ -22,18 +22,22 @@ public interface userRest {
    @PostMapping(path = "/login")
    public ResponseEntity<String> login(@RequestBody(required = true) Map<String,String> requestMap );
 
+   @CrossOrigin(origins="http://localhost:4200")
    @GetMapping(path="/get")
    public ResponseEntity<List<UserWrapper>> getAllUser();
 
+   @CrossOrigin(origins="http://localhost:4200")
    @PostMapping(path= "/update")
    public ResponseEntity<String> update(@RequestBody(required = true) Map<String,String> requestMap);
 
    @GetMapping(path = "/checkToken")
    ResponseEntity<String> checkToken();
-
+  
+   @CrossOrigin(origins="http://localhost:4200")
    @PostMapping(path = "/changePassword")
    ResponseEntity<String> changePassword(@RequestBody Map<String,String> requestMap);
-
+  
+   @CrossOrigin(origins="http://localhost:4200")
    @PostMapping(path = "/forgotPassword")
    ResponseEntity<String> forgotPassword(@RequestBody Map<String,String> requestMap);
 }
